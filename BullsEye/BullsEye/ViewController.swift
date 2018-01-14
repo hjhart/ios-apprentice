@@ -22,10 +22,10 @@ class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    startRound()
+    startNewRound()
   }
   
-  func startRound() {
+  func startNewRound() {
     round += 1
     currentValue = 50
     slider.value = Float(currentValue)
@@ -48,19 +48,39 @@ class ViewController: UIViewController {
     currentValue = lroundf(slider.value)
   }
   
+  @IBAction func startOver() {
+    score = 0
+    round = 0
+    startNewRound()
+  }
+  
   @IBAction func ShowAlert() {
     let difference = abs(targetValue - currentValue)
-    let points = 100 - difference
+    var points = 100 - difference
+    
+    let title: String
+    if difference == 0 {
+      points += 100
+      title = "Perfect"
+    } else if difference < 5 {
+      title = "You almost had it!"
+      if difference == 1 {
+        points += 50
+      }
+    } else if difference < 10 {
+      title = "I've had better"
+    } else {
+      title = "Not even close."
+    }
+    
     score = score + points
     let message = "The value of the slider is: \(currentValue)" +
                   "\nYou scored \(points) points"
     
-    let alert = UIAlertController(title: "Hello, Butts.", message: message, preferredStyle: .alert)
-    let action = UIAlertAction(title: "Right-o!", style: .default, handler: nil)
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    let action = UIAlertAction(title: "Right-o!", style: .default, handler: { action in self.startNewRound() })
     alert.addAction(action)
     present(alert, animated: true, completion: nil)
-    startRound()
-
   }
   
 }
