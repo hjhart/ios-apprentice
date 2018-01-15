@@ -28,6 +28,19 @@ class ChecklistViewController: UITableViewController {
     super.init(coder: aDecoder)
   }
   
+  @IBAction func addItem() {
+    let newRowIndex = items.count
+    
+    let item = ChecklistItem()
+    item.text = "I am a new row"
+    item.checked = false
+    items.append(item)
+    
+    let indexPath = IndexPath(row: newRowIndex, section: 0)
+    let indexPaths = [indexPath]
+    tableView.insertRows(at: indexPaths, with: .automatic)
+  }
+  
   func configureCheckmark(for cell: UITableViewCell, with item: ChecklistItem) {
     if item.checked {
       cell.accessoryType = .checkmark
@@ -35,9 +48,15 @@ class ChecklistViewController: UITableViewController {
       cell.accessoryType = .none
     }
   }
+  
+  func configureText(for cell: UITableViewCell, with item: ChecklistItem) {
+    let label = cell.viewWithTag(1000) as! UILabel
+    label.text = item.text
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    navigationController?.navigationBar.prefersLargeTitles = true
     // Do any additional setup after loading the view, typically from a nib.
   }
 
@@ -53,7 +72,7 @@ class ChecklistViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if let cell = tableView.cellForRow(at: indexPath) {
       let item = items[indexPath.row]
-      item.checked = !item.checked
+      item.toggleChecked()
       configureCheckmark(for: cell, with: item)
     }
     
@@ -62,11 +81,11 @@ class ChecklistViewController: UITableViewController {
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "ChecklistItem", for: indexPath)
-    let label = cell.viewWithTag(1000) as! UILabel
     
     let item = items[indexPath.row]
-    label.text = item.text
     configureCheckmark(for: cell, with: item)
+    configureText(for: cell, with: item)
+
     return cell
   }
   
