@@ -23,6 +23,26 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     startNewRound()
+    setUpSliderGraphics()
+  }
+  
+  func setUpSliderGraphics() {
+    let thumbImageNormal = #imageLiteral(resourceName: "SliderThumb-Normal")
+    slider.setThumbImage(thumbImageNormal, for: .normal)
+
+    let thumbImageHighlighted = #imageLiteral(resourceName: "SliderThumb-Highlighted")
+    slider.setThumbImage(thumbImageHighlighted, for: .highlighted)
+    
+    let insets = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
+    
+    let trackLeftImage = UIImage(named: "SliderTrackLeft")!
+    let trackLeftResizable = trackLeftImage.resizableImage(withCapInsets: insets)
+    slider.setMinimumTrackImage(trackLeftResizable, for: .normal)
+    
+    let trackRightImage = UIImage(named: "SliderTrackRight")!
+    let trackRightResizable = trackRightImage.resizableImage(withCapInsets: insets)
+    slider.setMaximumTrackImage(trackRightResizable, for: .normal)
+
   }
   
   func startNewRound() {
@@ -61,20 +81,20 @@ class ViewController: UIViewController {
     let title: String
     if difference == 0 {
       points += 100
-      title = "Perfect"
+      title = "Perfect!"
     } else if difference < 5 {
       title = "You almost had it!"
       if difference == 1 {
         points += 50
       }
     } else if difference < 10 {
-      title = "I've had better"
+      title = "I've had better."
     } else {
       title = "Not even close."
     }
     
     score = score + points
-    let message = "The value of the slider is: \(currentValue)" +
+    let message = "You guessed \(currentValue)" +
                   "\nYou scored \(points) points"
     
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
