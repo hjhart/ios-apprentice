@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QuartzCore
 
 class ViewController: UIViewController {
   
@@ -51,6 +52,12 @@ class ViewController: UIViewController {
     slider.value = Float(currentValue)
     targetValue = 1 + Int(arc4random_uniform(100))
     updateLabels()
+    
+    let transition = CATransition()
+    transition.type = kCATransitionFade
+    transition.duration = 1
+    transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+    view.layer.add(transition, forKey: nil)
   }
   
   func updateLabels() {
