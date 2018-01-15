@@ -10,6 +10,32 @@ import UIKit
 
 class ChecklistViewController: UITableViewController {
 
+  var items: [ChecklistItem]
+  
+  required init?(coder aDecoder: NSCoder) {
+    items = [ChecklistItem]()
+    
+    let row0item = ChecklistItem()
+    row0item.text = "Walk the dog"
+    row0item.checked = false
+    items.append(row0item)
+
+    let row1item = ChecklistItem()
+    row1item.text = "Butts butts butts"
+    row1item.checked = true
+    items.append(row1item)
+
+    super.init(coder: aDecoder)
+  }
+  
+  func configureCheckmark(for cell: UITableViewCell, with item: ChecklistItem) {
+    if item.checked {
+      cell.accessoryType = .checkmark
+    } else {
+      cell.accessoryType = .none
+    }
+  }
+
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
@@ -21,16 +47,14 @@ class ChecklistViewController: UITableViewController {
   }
 
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 100
+    return items.count
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if let cell = tableView.cellForRow(at: indexPath) {
-      if cell.accessoryType == .none {
-        cell.accessoryType = .checkmark
-      } else {
-        cell.accessoryType = .none
-      }
+      let item = items[indexPath.row]
+      item.checked = !item.checked
+      configureCheckmark(for: cell, with: item)
     }
     
     tableView.deselectRow(at: indexPath, animated: true)
@@ -40,20 +64,11 @@ class ChecklistViewController: UITableViewController {
     let cell = tableView.dequeueReusableCell(withIdentifier: "ChecklistItem", for: indexPath)
     let label = cell.viewWithTag(1000) as! UILabel
     
-    if indexPath.row % 5 == 0 {
-      label.text = "Walk the dog"
-    } else if indexPath.row % 5 == 1 {
-      label.text = "Brush my teeth"
-    } else if indexPath.row % 5 == 2 {
-      label.text = "Learn iOS development"
-    } else if indexPath.row % 5 == 3 {
-      label.text = "Soccer pratice"
-    } else if indexPath.row % 5 == 4 {
-      label.text = "Eat some ice cream"
-    }
-    
+    let item = items[indexPath.row]
+    label.text = item.text
+    configureCheckmark(for: cell, with: item)
     return cell
   }
-
+  
 }
 
