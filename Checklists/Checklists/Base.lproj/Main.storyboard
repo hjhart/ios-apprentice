@@ -50,7 +50,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="oyO-yO-BKw">
                             <connections>
                                 <action selector="addItem" destination="1te-OY-8hp" id="fGy-pJ-WIu"/>
-                                <segue destination="Iqs-ZU-RoL" kind="show" id="0xr-vH-VA7"/>
+                                <segue destination="Iqs-ZU-RoL" kind="show" identifier="AddItem" id="0xr-vH-VA7"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
