@@ -9,11 +9,44 @@
 import UIKit
 
 class ChecklistViewController: UITableViewController, ItemDetailViewControllerDelegate {
-  var items: [ChecklistItem]
+  var items = [ChecklistItem]()
+  
+  func documentsDirectory() -> URL {
+    let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+    return paths[0]
+  }
+  
+  func dataFilePath() -> URL {
+    return documentsDirectory().appendingPathComponent("Checklists.plist")
+  }
+  
+  func saveChecklistItems() {
+    // 1
+    let encoder = PropertyListEncoder()
+    // 2
+    do {
+      let data = try encoder.encode(items)
+      try data.write(to: dataFilePath(), options: Data.WritingOptions.atomic)
+    } catch {
+      print("Error encoding data array")
+    }
+  }
+
+  func loadChecklistItems() {
+    let path = dataFilePath()
+    if let data = try? Data(contentsOf: path) {
+      let decoder = PropertyListDecoder()
+      do {
+        items = try decoder.decode([ChecklistItem].self, from: data)
+      } catch {
+        print("Error decoding data array")
+      }
+    }
+  }
 
   func itemDetailViewControllerDidCancel(_ controller: ItemDetailViewController) {
     navigationController?.popViewController(animated: true)
-
+    saveChecklistItems()
   }
   
   func itemDetailViewController(_ controller: ItemDetailViewController, didFinishAdding item: ChecklistItem) {
@@ -23,8 +56,8 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
 
     items.append(item)
     tableView.insertRows(at: indexPaths, with: .automatic)
-    
     navigationController?.popViewController(animated: true)
+    saveChecklistItems()
   }
   
   func itemDetailViewController(_ controller: ItemDetailViewController, didFinishEditing item: ChecklistItem) {
@@ -35,23 +68,13 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
       }
     }
     navigationController?.popViewController(animated: true)
+    saveChecklistItems()
   }
 
 
   required init?(coder aDecoder: NSCoder) {
-    items = [ChecklistItem]()
-    
-    let row0item = ChecklistItem()
-    row0item.text = "Walk the dog"
-    row0item.checked = false
-    items.append(row0item)
-
-    let row1item = ChecklistItem()
-    row1item.text = "Butts butts butts"
-    row1item.checked = true
-    items.append(row1item)
-
     super.init(coder: aDecoder)
+    print("Data file path is folder is \(dataFilePath())")
   }
   
   func configureCheckmark(for cell: UITableViewCell, with item: ChecklistItem) {
@@ -85,12 +108,11 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationController?.navigationBar.prefersLargeTitles = true
-    // Do any additional setup after loading the view, typically from a nib.
+    loadChecklistItems()
   }
 
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
   }
 
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -105,6 +127,7 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
     }
     
     tableView.deselectRow(at: indexPath, animated: true)
+    saveChecklistItems()
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
