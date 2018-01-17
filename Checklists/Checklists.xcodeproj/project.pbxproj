@@ -47,6 +47,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8C3B3522200F316B0028760E /* Data Models */ = {
+			isa = PBXGroup;
+			children = (
+				8C9636B0200ECF2F0032F900 /* Checklist.swift */,
+				8C7ECF17200D3C3B009383BA /* ChecklistItem.swift */,
+				8C3B3520200F1AB60028760E /* DataModel.swift */,
+			);
+			path = "Data Models";
+			sourceTree = "<group>";
+		};
+		8C3B3523200F31950028760E /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				8C3B0754200EDE8D002453C9 /* ListDetailViewController.swift */,
+				8C43BA52200C92F10075334A /* ChecklistViewController.swift */,
+				8C9636AE200E9A5C0032F900 /* AllListsViewController.swift */,
+				8C7ECF19200D7B33009383BA /* ItemDetailViewController.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
 		8C43BA44200C92F10075334A = {
 			isa = PBXGroup;
 			children = (
@@ -66,18 +87,13 @@
 		8C43BA4F200C92F10075334A /* Checklists */ = {
 			isa = PBXGroup;
 			children = (
-				8C3B0754200EDE8D002453C9 /* ListDetailViewController.swift */,
+				8C3B3523200F31950028760E /* View Controllers */,
+				8C3B3522200F316B0028760E /* Data Models */,
 				8C43BA50200C92F10075334A /* AppDelegate.swift */,
-				8C43BA52200C92F10075334A /* ChecklistViewController.swift */,
-				8C9636B0200ECF2F0032F900 /* Checklist.swift */,
-				8C9636AE200E9A5C0032F900 /* AllListsViewController.swift */,
 				8C43BA54200C92F10075334A /* Main.storyboard */,
-				8C7ECF19200D7B33009383BA /* ItemDetailViewController.swift */,
 				8C43BA57200C92F10075334A /* Assets.xcassets */,
 				8C43BA59200C92F10075334A /* LaunchScreen.storyboard */,
 				8C43BA5C200C92F10075334A /* Info.plist */,
-				8C7ECF17200D3C3B009383BA /* ChecklistItem.swift */,
-				8C3B3520200F1AB60028760E /* DataModel.swift */,
 			);
 			path = Checklists;
 			sourceTree = "<group>";

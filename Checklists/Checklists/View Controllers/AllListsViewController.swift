@@ -8,12 +8,23 @@
 
 import UIKit
 
-class AllListsViewController: UITableViewController, ListDetailViewControllerDelegate {
+class AllListsViewController: UITableViewController, ListDetailViewControllerDelegate, UINavigationControllerDelegate {
   var dataModel: DataModel!
   
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationController?.navigationBar.prefersLargeTitles = true
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    
+    navigationController?.delegate = self
+    let index = dataModel.indexOfSelectedChecklist
+    if index != -1 && index < dataModel.lists.count {
+      let checklist = dataModel.lists[index]
+      performSegue(withIdentifier: "ShowChecklist", sender: checklist)
+    }
   }
   
   override func numberOfSections(in tableView: UITableView) -> Int {
@@ -42,7 +53,18 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     return cell
   }
   
+  func makeCell(for tableView: UITableView) -> UITableViewCell {
+    let cellIdentifier = "Cell"
+    
+    if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) {
+      return cell
+    } else {
+      return UITableViewCell(style: .default, reuseIdentifier: cellIdentifier)
+    }
+  }
+
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    dataModel.indexOfSelectedChecklist = indexPath.row
     let checklist = dataModel.lists[indexPath.row]
     performSegue(withIdentifier: "ShowChecklist", sender: checklist)
   }
@@ -64,6 +86,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     }
   }
 
+  // - ListDetailViewControllerDelegate methods
   func listDetailViewControllerDidCancel(_ controller: ListDetailViewController) {
     navigationController?.popViewController(animated: true)
   }
@@ -90,17 +113,10 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     navigationController?.popViewController(animated: true)
   }
 
-  
-  func makeCell(for tableView: UITableView) -> UITableViewCell {
-    let cellIdentifier = "Cell"
-    
-    if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) {
-      return cell
-    } else {
-      return UITableViewCell(style: .default, reuseIdentifier: cellIdentifier)
+  // - UINavigationControllerDelegate methods
+  func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+    if viewController === self {
+      dataModel.indexOfSelectedChecklist = -1
     }
   }
-  
-  
-
 }
