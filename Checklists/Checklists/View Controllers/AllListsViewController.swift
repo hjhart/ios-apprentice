@@ -58,6 +58,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
       cell.detailTextLabel!.text = "\(count) Remaining"
     }
     cell.accessoryType = .detailDisclosureButton
+    cell.imageView!.image = UIImage(named: list.iconName)
     return cell
   }
   
@@ -105,7 +106,6 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
   }
 
   func listDetailViewController(_ controller: ListDetailViewController, didFinishAdding checklist: Checklist) {
-    let newRowIndex = dataModel.lists.count
     dataModel.lists.append(checklist)
     dataModel.sortChecklists()
     tableView.reloadData()
