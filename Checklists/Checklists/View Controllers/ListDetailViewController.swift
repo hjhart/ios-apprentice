@@ -24,6 +24,7 @@ class ListDetailViewController: UITableViewController, UITextFieldDelegate, Icon
   var checklistToEdit: Checklist?
   var iconName = "Folder"
 
+  // MARK:- Navigation
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "PickIcon" {
       let controller = segue.destination as! IconPickerViewController
@@ -75,12 +76,12 @@ class ListDetailViewController: UITableViewController, UITextFieldDelegate, Icon
       checklist.iconName = iconName
       delegate?.listDetailViewController(self, didFinishEditing: checklist)
     } else {
-      let checklist = Checklist(name: textField.text!)
+      let checklist = Checklist(name: textField.text!, iconName: iconName)
       checklist.iconName = iconName
       delegate?.listDetailViewController(self, didFinishAdding: checklist)
     }
   }
-
+    
   // MARK:- Icon Picker View Controller Delegate methods
   func iconPicker(_ picker: IconPickerViewController, didPick iconName: String) {
     self.iconName = iconName
